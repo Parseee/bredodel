@@ -17,13 +17,22 @@ int main(void)
 
     fprintf(stderr, is_sorted(tx.text, tx.text_size, sizeof(*tx.text), Text_strcmp) ? "Sorted\n" : "Not sorted\n");
 
-    // Text_sort(&tx);
+    if (Text_sort(&tx)) {
+        return EXIT_FAILURE;
+    }
 
     for (size_t i = 0; i < tx.text_size; ++i) {
         fprintf(stderr, "%s\n", tx.text[i]);
     }
 
     Text_kill(&tx);
+
+    // char* a = "123123";
+    // char* b = "abcabc";
+
+    // swap(&a, &b, sizeof(a));
+
+    // fprintf(stderr, "%s, %s\n", a, b);
 
     return EXIT_SUCCESS;
 }

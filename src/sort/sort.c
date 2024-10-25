@@ -2,6 +2,7 @@
 
 #include <ctype.h>
 #include <stddef.h>
+#include <stdint.h>
 
 bool is_sorted(void* array, size_t array_size, size_t size,
     bool (*compare)(const void*, const void*))
@@ -17,48 +18,46 @@ bool is_sorted(void* array, size_t array_size, size_t size,
     return true;
 }
 
+static void vectorized_memory_swap(void** ptr1, void** ptr2, void* ptr_tmp, size_t size)
+{
+    lassert(ptr1, "");
+    lassert(ptr2, "");
+    lassert(*ptr1, "");
+    lassert(*ptr2, "");
+    lassert(ptr_tmp, "");
+
+    memcpy(ptr_tmp, *ptr1, size);
+    memcpy(*ptr1, *ptr2, size);
+    memcpy(*ptr2, ptr_tmp, size);
+
+    *ptr1 = (char*)(*ptr1) + size;
+    *ptr2 = (char*)(*ptr2) + size;
+}
+
 void swap(void* ptr1, void* ptr2, size_t size)
 {
     lassert(ptr1, "");
-    lassert(ptr1, "");
+    lassert(ptr2, "");
 
-    int idx = 0;
-    void* ptr_tmp = malloc(size);
-    void* ptr_start = ptr_tmp;
-    for (; idx < size / 8; ++idx) {
-        memcpy(ptr_tmp, ptr1, 8);
-        memcpy(ptr2, ptr1, 8);
-        memcpy(ptr1, ptr_tmp, 8);
-        ptr1 += 8;
-        ptr2 += 8;
-        ptr_tmp += 8;
+    while (size >= sizeof(uint64_t)) {
+        uint64_t ptr_tmp;
+        vectorized_memory_swap(&ptr1, &ptr2, (void*)&ptr_tmp, sizeof(uint64_t));
+        size -= sizeof(uint64_t);
     }
-    size %= 8;
-    for (; idx < size / 4; ++idx) {
-        memcpy(ptr_tmp, ptr1, 8);
-        memcpy(ptr2, ptr1, 8);
-        memcpy(ptr1, ptr_tmp, 8);
-        ptr1 += 4;
-        ptr2 += 4;
-        ptr_tmp += 4;
+    if (size & sizeof(uint64_t)) {
+        uint32_t ptr_tmp = 0;
+        vectorized_memory_swap(&ptr1, &ptr2, (void*)&ptr_tmp, 4);
+        size -= sizeof(uint32_t);
     }
-    size %= 4;
-    for (; idx < size / 2; ++idx) {
-        memcpy(ptr_tmp, ptr1, 8);
-        memcpy(ptr2, ptr1, 8);
-        memcpy(ptr1, ptr_tmp, 8);
-        ptr1 += 2;
-        ptr2 += 2;
-        ptr_tmp += 2;
+    if (size & sizeof(uint16_t)) {
+        uint16_t ptr_tmp = 0;
+        vectorized_memory_swap(&ptr1, &ptr2, (void*)&ptr_tmp, 2);
+        size -= sizeof(uint16_t);
     }
-    size %= 2;
-    for (; idx < size; ++idx) {
-        memcpy(ptr_tmp, ptr1, 8);
-        memcpy(ptr2, ptr1, 8);
-        memcpy(ptr1, ptr_tmp, 8);
-        ptr1 += 1;
-        ptr2 += 1;
-        ptr_tmp += 1;
+    if (size & sizeof(uint8_t)) {
+        uint8_t ptr_tmp = 0;
+        vectorized_memory_swap(&ptr1, &ptr2, (void*)&ptr_tmp, 1);
+        size -= sizeof(uint8_t);
     }
 
     return;
@@ -68,11 +67,14 @@ sorted_state Text_sort(Text* text)
 {
     lassert(text, "");
 
-    for (int i = 0; i < text->text_size; ++i) {
-        for (int j = i + 1; j < text->text_size; ++j) {
-            if (!Text_strcmp(text->text[i], text->text[j])) {
-                swap(text->text[i], text->text[j], 30);
+    for (size_t i = 0; i < text->text_size; ++i) {
+        for (size_t j = i + 1; j < text->text_size; ++j) {
+            // fprintf(stderr, "%s, %s\n", text->text[i], text->text[j]);
+            if (!Text_strcmp((char*)text->text + i * sizeof(char*), (void*)text->text + j * sizeof(char*))) {
+                swap((char*)text->text + i * sizeof(char*), (void*)text->text + j * sizeof(char*), sizeof(*text->text));
             }
         }
     }
+
+    return OK;
 }
