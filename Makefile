@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-PROJECT_NAME = onegin
+PROJECT_NAME = lab3
 
 SRC_DIR = ./src
 BUILD_DIR = ./build
@@ -22,10 +22,10 @@ CFLAGS =-Wall -Wextra -Waggressive-loop-optimizations -g \
 		-fno-omit-frame-pointer -Wlarger-than=81920 -Wstack-usage=81920 \
 		-fPIE -Werror=vla
 
-SOURCES = main.c logger/logger.c text/text.c sort/sort.c
+SOURCES = main.c logger/logger.c array/array.c exec/exec.c
 SOURCES_REL_PATH = $(patsubst %.c,$(SRC_DIR)/%.c,$(SOURCES))
 
-DIRS = text logger sort
+DIRS = array logger exec
 BUILD_DIRS = $(DIRS:%=$(BUILD_DIR)/%)
 
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))

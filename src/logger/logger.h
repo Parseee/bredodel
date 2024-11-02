@@ -53,6 +53,13 @@ logger_state log_lassert(const char* const format, place_in_code_t info, va_list
         }                                                             \
     } while (0)
 
+#define report_error(error)                                             \
+    do {                                                                \
+        fprintf(stderr, #error " in file: %s, on line: %d\n", __FILE__, \
+                __LINE__);                                              \
+        return error;                                                   \
+    } while (0)
+
 #endif /* NDEBUG */
 
 #endif /* LOGGER_H */
