@@ -12,14 +12,16 @@ int main(void)
 {
     log_create();
 
-    Array array;
+    Array array = {.data = NULL, .size = 0};
 
     bool quit = false;
     while (!quit) {
         if (exec(&array)) {
-            //
+            quit = true;
         }
     }
+
+    log_destruct();
 
     return EXIT_SUCCESS;
 }

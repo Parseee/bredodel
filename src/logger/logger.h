@@ -1,4 +1,3 @@
-#pragma once
 #ifndef LOGGER_H
 #define LOGGER_H
 
@@ -42,22 +41,23 @@ logger_state log_lassert(const char* const format, place_in_code_t info, va_list
 
 #else /* NDEBUG */
 
-#define lassert(check, ...)                                           \
-    do {                                                              \
-        if (!(check)) {                                               \
-            log_func((place_in_code_t){.func=__func__, .file=__FILE__, .line=__LINE__}, LOGGER_ERROR_MODE, \
-                ##__VA_ARGS__);                                       \
-            if (log_destruct())                                       \
-                fprintf(stderr, "Can't destroy logger\n");            \
-            assert(0);                                                \
-        }                                                             \
+#define lassert(check, ...)                                                                                         \
+    do {                                                                                                            \
+        if (!(check)) {                                                                                             \
+            log_func((place_in_code_t) { .func = __func__, .file = __FILE__, .line = __LINE__ }, LOGGER_ERROR_MODE, \
+                ##__VA_ARGS__);                                                                                     \
+            if (log_destruct())                                                                                     \
+                fprintf(stderr, "Can't destroy logger\n");                                                          \
+            assert(0);                                                                                              \
+        }                                                                                                           \
     } while (0)
 
-#define report_error(error)                                             \
-    do {                                                                \
-        fprintf(stderr, #error " in file: %s, on line: %d\n", __FILE__, \
-                __LINE__);                                              \
-        return error;                                                   \
+#define report_error(error, format)                                                \
+    do {                                                                           \
+        fprintf(stderr, #error " " format " in file: %s, on line: %d\n", __FILE__, \
+            __LINE__);                                                             \
+        return error;                                                              \
+        /* exit(EXIT_FAILURE) */                                                   \
     } while (0)
 
 #endif /* NDEBUG */
