@@ -1,0 +1,32 @@
+Log ERROR   LOGGER.logout, 2024 Oct 18 20:06:29. Func - Text_strcmp() in src/sort/sort.c:6:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 00:36:41. Func - Text_set_text_data() in src/text/text.c:34:  ptr
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 00:37:13. Func - Text_set_text_data() in src/text/text.c:34:  ptr
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 00:37:53. Func - Text_set_text() in src/text/text.c:76:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 00:38:13. Func - Text_set_text() in src/text/text.c:75:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 00:47:11. Func - Text_strcmp() in src/sort/sort.c:5:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 00:47:23. Func - Text_strcmp() in src/sort/sort.c:5:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:28:23. Func - Text_strcmp() in src/sort/sort.c:5:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:35:13. Func - Text_strcmp() in src/sort/sort.c:5:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:37:24. Func - Text_strcmp() in src/sort/sort.c:4:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:43:13. Func - Text_strcmp() in src/sort/sort.c:4:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:43:21. Func - Text_strcmp() in src/sort/sort.c:4:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:43:26. Func - Text_strcmp() in src/sort/sort.c:4:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:43:57. Func - Text_strcmp() in src/sort/sort.c:4:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:44:48. Func - Text_strcmp() in src/sort/sort.c:4:  
+
+Log ERROR   LOGGER.logout, 2024 Oct 21 09:45:09. Func - Text_strcmp() in src/sort/sort.c:4:  
+

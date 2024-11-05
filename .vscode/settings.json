@@ -1,0 +1,17 @@
+{
+    "makefile.configureOnOpen": true,
+    "files.associations": {
+        "array": "c",
+        "span": "c",
+        "string": "c",
+        "string_view": "c",
+        "vector": "c"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/ilababakov/Documents/code/lab3",
+            "binaryPath": "/Users/ilababakov/Documents/code/mephi_pracs/lab3.out",
+            "binaryArgs": []
+        }
+    ]
+}
