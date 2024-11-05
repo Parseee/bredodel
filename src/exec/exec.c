@@ -55,12 +55,12 @@ error_state exec(Array* array)
     lassert(array, "");
 
     fprintf(stdout, "1. Create(allocate) array\n"
-                     "2. Init array with keyboard input\n"
-                     "3. Add element to index\n"
-                     "4. Remove element on index\n"
-                     "5. User func\n"
-                     "6. Print array\n"
-                     "7. Destroy array\n");
+                    "2. Init array with keyboard input\n"
+                    "3. Add element to index\n"
+                    "4. Remove element on index\n"
+                    "5. User func\n"
+                    "6. Print array\n"
+                    "7. Destroy array\n");
 
     fprintf(stdout, "Enter command: ");
     int mode = 0;
@@ -71,25 +71,34 @@ error_state exec(Array* array)
     case (1):
         fprintf(stdout, "How many elements to init: ");
         input_handle(&val, stdin, 1);
-        Array_create(array, val);
+
+        if (Array_create(array, val) == OK) {
+            fprintf(stdout, "\narray created\n\n");
+        }
         break;
     case (2):
         fprintf(stdout, "How manny elements to init: ");
         input_handle(&val, stdin, 8);
+
         if (Array_init(array, val, input_handle) == OK) {
-            fprintf(stderr, "\narray init\n");
+            fprintf(stderr, "\narray init\n\n");
         }
         break;
     case (3):
-        fprintf(stdout, "Index of insertion: ");
+        fprintf(stdout, "Index of insertion (1 indexed): ");
         input_handle(&idx, stdin, 8);
         fprintf(stdout, "Element to insert: ");
-        Array_insert(array, val);
+        input_handle(&val, stdin, 8);
+        
+        if(Array_insert(array, val, idx - 1) == OK) {
+            fprintf(stderr, "elemets inserted");
+        }
         break;
     case (4):
         fprintf(stdout, "Index of element to remove (1 indexed): ");
-        input_handle(&val, stdin, 8);
-        if (Array_remove(array, val - 1) == OK) {
+        input_handle(&idx, stdin, 8);
+
+        if (Array_remove(array, idx - 1) == OK) {
             fprintf(stderr, "element removed");
         }
         break;
@@ -101,7 +110,7 @@ error_state exec(Array* array)
         break;
     case (7):
         if (Array_kill(array) == OK) {
-            fprintf(stderr, "\narray killed\n");
+            fprintf(stderr, "\narray killed\n\n");
         }
         break;
     default:

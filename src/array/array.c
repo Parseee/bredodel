@@ -13,23 +13,29 @@ error_state Array_create(Array* array, size_t size)
         report_error(LOGIC_ERROR, "already created");
     }
 
-    array->data = calloc(size, sizeof(array->data));
+    array->data = calloc(size, sizeof(int));
     lassert(array->data, "");
+    array->size = 0;
     return OK;
 }
 
-error_state Array_insert(Array* array, int value)
+error_state Array_insert(Array* array, int value, size_t index)
 {
     lassert(array, "");
-
-    if (!(array->data = realloc(array->data, array->size + 1))) {
+    int* new_data = NULL;
+    if (!(new_data = realloc(array->data, array->size + 1))) {
         free(array->data);
         array->size = 0;
         report_error(ALLOC_ERROR, "");
     }
-
+    array->data = new_data;
     array->size += 1;
-    array->data[array->size - 1] = value;
+
+    for (int i = array->size - 1; i > index; --i) {
+        array->data[i] = array->data[i - 1];
+    }
+
+    array->data[index] = value;
 
     return OK;
 }
@@ -41,8 +47,7 @@ error_state Array_init(Array* array, size_t init_size, error_state (*input_handl
     for (size_t i = 0; i < init_size; ++i) {
         int val;
         input_handle(&val, stdin, 8); // how to handle error here???
-        Array_insert(array, val);
-        
+        Array_insert(array, val, i);
     }
 
     return OK;
@@ -60,28 +65,35 @@ error_state Array_remove(Array* array, size_t index)
         array->data[i] = array->data[i + 1];
     }
 
-    if (!(array->data = realloc(array->data, array->size - 1))) {
+    int* new_data = NULL;
+    if (!(new_data = realloc(array->data, array->size - 1))) {
         free(array->data);
         array->size = 0;
         report_error(ALLOC_ERROR, "");
     }
 
+    array->data = new_data;
+    array->size -= 1;
+
     return OK;
 }
 
-error_state Array_kill(Array *array) {
+error_state Array_kill(Array* array)
+{
     lassert(array, "");
     if (!array->data) {
         report_error(LOGIC_ERROR, "not created");
     }
 
     free(array->data);
+    array->data = NULL;
     array->size = 0;
 
     return (!array->data) ? OK : ALLOC_ERROR;
 }
 
-error_state Array_print(Array *array) {
+error_state Array_print(Array* array)
+{
     lassert(array, "");
 
     if (!array->data) {
@@ -96,6 +108,7 @@ error_state Array_print(Array *array) {
     return OK;
 }
 
-error_state Array_func(Array *array) {
+error_state Array_func(Array* array)
+{
     return OK;
 }
